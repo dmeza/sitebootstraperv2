@@ -1,0 +1,44 @@
+!!!! 5
+%html
+  %head
+    %title Sitebootstrapper
+    = javascript_include_tag "sitebootstrapperv2/sitebootstrapper"
+    = csrf_meta_tag
+  %body
+    #container
+      - if !flash.empty?
+        / flash messages
+        #flash_messages_container
+          #flash_messages
+            - flash.each do |name, msg|
+              = content_tag :div, msg, :class => "notice #{name}" if msg.is_a?(String)
+            %br/
+        / flash messages
+      %p(style='clear:left;')=link_to 'Home', root_path
+      #user_login_box(style='float:right')
+        - if user_signed_in?
+          = image_tag(current_user.photo.url, :size => "40x40", :alt => "")
+          = current_user.full_name
+          \|
+          = link_to 'My info', edit_user_registration_path
+          - User.omniauth_providers.each do |provider|
+            \|
+            = link_to provider.to_s.titleize, omniauth_authorize_path(:user, provider)
+          \|
+          - if(session["admin_user_id"])
+            = link_to 'back to admin', return_to_admin_path
+            \|
+          - else
+            - if current_user.is_admin?
+              = link_to 'Admin', admin_users_path
+              \|
+          = link_to 'Sign out', destroy_user_session_path
+        - else
+          = link_to 'Sign up as User', new_registration_path(:user)
+          \|
+          = link_to 'Sign in as User', new_session_path(:user)
+          - User.omniauth_providers.each do |provider|
+            \|
+            = link_to "Sign in with #{provider.to_s.titleize}", omniauth_authorize_path(:user, provider)
+      %div(style="clear:both")
+      = yield

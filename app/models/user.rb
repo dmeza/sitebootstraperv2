@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
-  devise :database_authenticatable, :encryptable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, :omniauth_providers => [:twitter, :facebook, :google_apps]
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, :omniauth_providers => [:twitter, :facebook] #, :google_apps
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :remember_me, :is_admin, :lat, :lng, :photo, :phone
@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
         :thumbnail => "60x60>",
         :original => "250x250>"
       },
-      :default_url => "/images/default_user.png"
+      :default_url => "/assets/default_user.png"
   }
 
   def status
@@ -34,30 +34,28 @@ class User < ActiveRecord::Base
   end
 
   def email_required?
-    true
+    authentications.empty?
   end
 
   def apply_omniauth(omniauth)
-    self.email = omniauth['user_info']['email'] if email.blank?
-    if (!omniauth['user_info']['first_name'].blank? && !omniauth['user_info']['last_name'].blank?)
-      first_name = omniauth['user_info']['first_name']
-      last_name = omniauth['user_info']['last_name']
-    elsif (!omniauth['user_info']['name'].blank?)
-      name_array = omniauth['user_info']['name'].split(' ')
-      first_name = name_array.first
-      last_name = name_array[1..name_array.length].join(' ')
+    self.email = omniauth['info']['email'] if email.blank?
+    if (!omniauth['info']['first_name'].blank? && !omniauth['info']['last_name'].blank?)
+      self.first_name ||= omniauth['info']['first_name']
+      self.last_name ||= omniauth['info']['last_name']
+    elsif (!omniauth['info']['name'].blank?)
+      name_array = omniauth['info']['name'].split(' ')
+      self.first_name ||= name_array.first
+      self.last_name ||= name_array[1..name_array.length].join(' ')
     end
-    self.first_name = first_name
-    self.last_name = last_name
-    set_photo_from_url(omniauth['user_info']['image'])
-    authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
+    set_photo_from_url(omniauth['info']['image'])
+    user.authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'], :token => (omniauth['credentials'] && omniauth['credentials']['token'])) if !user.persisted? || !user.authentications.exists?(:provider => omniauth['provider'], :uid => omniauth['uid'])
   end
 
   def set_photo_from_url(image_url)
-    if self.photo_file_name.blank? || self.photo_file_name == 'default_user.pnh'
+    if self.photo_file_name.blank? || self.photo_file_name == 'default_user.png'
       begin
         io = open(URI.parse(image_url))
-        def io.original_filename; base_uri.path.split('/').last; end
+        def io.original_filename; base_uri.path.split('/').last end
         if !io.original_filename.blank?
           self.photo = io
         end
@@ -66,4 +64,11 @@ class User < ActiveRecord::Base
     end
   end
 
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      if data = session["devise.omniauth"]
+        user.apply_omniauth(data)
+      end
+    end
+  end
 end

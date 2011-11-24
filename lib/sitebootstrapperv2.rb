@@ -1,6 +1,7 @@
 require "devise"
-require "omniauth/oauth"
-require "omniauth/openid"
+require "paperclip"
+require "haml"
+require "will_paginate"
 require "sitebootstrapperv2/engine"
 
 module Sitebootstrapperv2
