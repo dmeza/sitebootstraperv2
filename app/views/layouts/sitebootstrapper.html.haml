@@ -32,7 +32,7 @@
             - if current_user.is_admin?
               = link_to 'Admin', admin_users_path
               \|
-          = link_to 'Sign out', destroy_user_session_path
+          = link_to 'Sign out', destroy_user_session_path, :method => 'delete'
         - else
           = link_to 'Sign up as User', new_registration_path(:user)
           \|

@@ -1,3 +1,4 @@
+require 'open-uri'
 class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, :omniauth_providers => [:twitter, :facebook] #, :google_apps
@@ -48,18 +49,22 @@ class User < ActiveRecord::Base
       self.last_name ||= name_array[1..name_array.length].join(' ')
     end
     set_photo_from_url(omniauth['info']['image'])
-    user.authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'], :token => (omniauth['credentials'] && omniauth['credentials']['token'])) if !user.persisted? || !user.authentications.exists?(:provider => omniauth['provider'], :uid => omniauth['uid'])
+    self.authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'], :token => (omniauth['credentials'] && omniauth['credentials']['token'])) if !self.persisted? || !self.authentications.exists?(:provider => omniauth['provider'], :uid => omniauth['uid'])
   end
 
   def set_photo_from_url(image_url)
+    logger.info("PHOTO IMAGE URL: #{image_url}")
     if self.photo_file_name.blank? || self.photo_file_name == 'default_user.png'
+      logger.info("TRY TO CHANGE THE PHOTO")
       begin
         io = open(URI.parse(image_url))
         def io.original_filename; base_uri.path.split('/').last end
         if !io.original_filename.blank?
           self.photo = io
         end
-      rescue
+        logger.info("IT LOOKS LIKE THE PHOTO WAS CHANGED")
+      rescue Exception => ex
+        logger.info("ERROR ERROR ERROR ::: #{ex.message}")
       end
     end
   end

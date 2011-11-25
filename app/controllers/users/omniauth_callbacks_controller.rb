@@ -1,5 +1,5 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  def method_mission(provider)
+  def method_missing(provider)
     if !User.omniauth_providers.index(provider).nil?
       omniauth = request.env["omniauth.auth"]
       authentication = Authentication.find_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
