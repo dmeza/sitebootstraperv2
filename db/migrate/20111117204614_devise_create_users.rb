@@ -28,6 +28,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :provider, :null => false
       t.string :uid, :null => false
       t.string :token, :null => true
+      t.string :secret, :null => true
     end
     add_index :authentications, [:provider, :uid], :unique => true, :name => :authentications_provider_uid_index
   end
