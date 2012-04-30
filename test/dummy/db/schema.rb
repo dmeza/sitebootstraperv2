@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(:version => 20111123200225) do
     t.string  "provider", :null => false
     t.string  "uid",      :null => false
     t.string  "token"
+    t.string  "secret"
   end
 
   add_index "authentications", ["provider", "uid"], :name => "authentications_provider_uid_index", :unique => true
@@ -45,8 +46,8 @@ ActiveRecord::Schema.define(:version => 20111123200225) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
   end
 
   add_index "users", ["confirmation_token"], :name => "index_users_on_confirmation_token", :unique => true

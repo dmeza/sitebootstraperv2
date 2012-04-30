@@ -1,6 +1,6 @@
-require 'openid/store/filesystem'
 require 'omniauth-facebook'
 require 'omniauth-twitter'
+require 'omniauth-google-oauth2'
 
 # Use this hook to configure devise mailer, warden hooks and so forth. The first
 # four configuration values can also be set straight in your models.
@@ -204,7 +204,7 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
   config.omniauth :facebook, 'APP_ID', 'APP_SECRET'
   config.omniauth :twitter, 'CONSUMER_KEY', 'CONSUMER_SECRET'
-  #config.omniauth :google_apps, OpenID::Store::Filesystem.new('./tmp')
+  config.omniauth :google_oauth2, 'GOOGLE_KEY', 'GOOGLE_SECRET', {:access_type => 'online', :approval_prompt => ''}
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

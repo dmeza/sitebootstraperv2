@@ -1,7 +1,7 @@
 require 'open-uri'
 class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, :omniauth_providers => [:twitter, :facebook] #, :google_apps
+         :recoverable, :rememberable, :trackable, :validatable, :confirmable, :omniauthable, :omniauth_providers => [:twitter, :facebook, :google_oauth2]
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :remember_me, :is_admin, :lat, :lng, :photo, :phone
@@ -53,18 +53,15 @@ class User < ActiveRecord::Base
   end
 
   def set_photo_from_url(image_url)
-    logger.info("PHOTO IMAGE URL: #{image_url}")
-    if self.photo_file_name.blank? || self.photo_file_name == 'default_user.png'
-      logger.info("TRY TO CHANGE THE PHOTO")
+    if !image_url.blank? self.photo_file_name.blank? || self.photo_file_name == 'default_user.png'
       begin
         io = open(URI.parse(image_url))
         def io.original_filename; base_uri.path.split('/').last end
         if !io.original_filename.blank?
           self.photo = io
         end
-        logger.info("IT LOOKS LIKE THE PHOTO WAS CHANGED")
       rescue Exception => ex
-        logger.info("ERROR ERROR ERROR ::: #{ex.message}")
+        logger.error("ERROR ERROR ERROR ::: #{ex.message}")
       end
     end
   end
