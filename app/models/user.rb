@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
       self.last_name ||= name_array[1..name_array.length].join(' ')
     end
     set_photo_from_url(omniauth['info']['image'])
-    self.authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'], :token => (omniauth['credentials'] && omniauth['credentials']['token'])) if !self.persisted? || !self.authentications.exists?(:provider => omniauth['provider'], :uid => omniauth['uid'])
+    self.authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'], :token => (omniauth['credentials']['token'] rescue nil), :secret => (omniauth['credentials']['secret'] rescue nil)) if !self.persisted? || !self.authentications.exists?(:provider => omniauth['provider'], :uid => omniauth['uid'])
   end
 
   def set_photo_from_url(image_url)
