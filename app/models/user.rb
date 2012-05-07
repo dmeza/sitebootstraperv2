@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
   end
 
   def set_photo_from_url(image_url)
-    if !image_url.blank? self.photo_file_name.blank? || self.photo_file_name == 'default_user.png'
+    if !image_url.blank? || self.photo_file_name.blank? || self.photo_file_name == 'default_user.png'
       begin
         io = open(URI.parse(image_url))
         def io.original_filename; base_uri.path.split('/').last end
