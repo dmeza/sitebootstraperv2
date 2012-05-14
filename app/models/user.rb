@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   end
 
   def password_required?
-    authentications.empty? || !persisted? || !password.nil? || !password_confirmation.nil?
+    (authentications.empty? && !persisted?) || !password.nil? || !password_confirmation.nil?
   end
 
   def email_required?
