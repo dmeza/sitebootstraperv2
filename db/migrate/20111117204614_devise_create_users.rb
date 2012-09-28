@@ -28,7 +28,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string :unconfirmed_email
 
       ## rememberable
-      t.datetime :rememeber_created_at
+      t.datetime :remember_created_at
 
       ## trackable
       t.integer :sign_in_count, :default => 0
