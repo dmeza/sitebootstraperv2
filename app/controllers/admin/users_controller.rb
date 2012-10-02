@@ -11,7 +11,7 @@ class Admin::UsersController < Admin::AdminController
   def resend_activation
     user = User.find(params[:id])
     user.send_confirmation_instructions
-    render :json => {:status => 1, :user_name => user.full_name}
+    #render :json => {:status => 1, :user_name => user.full_name}
   end
 
   def login_as
