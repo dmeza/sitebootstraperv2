@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :first_name, :last_name, :password, :password_confirmation, :remember_me, :is_admin, :lat, :lng, :photo, :phone
 
-  has_many :authentications
+  has_many :authentications, :dependent => :destroy
 
   has_attached_file :photo, {
       :url => "/system/:class/:attachment/:id/:style_:basename.:extension",
