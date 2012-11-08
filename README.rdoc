@@ -16,6 +16,8 @@
        layout "sitebootstrapper"
 10. If you'd like to get a local copy of the views that sitebootstrapper uses, run: rails g sitebootstrapper:views
 11. If you want to allow your users to sign up with facebook, twitter or google apps then set the app keys in config/initializers/devise.rb
+12. If you want to allow your users to post to feed on facebook then set the constant FB_APP_ID to your FB app id in config/environments/production.rb:
+    FB_APP_ID =  'FB APP ID'
 
 == Contributing to sitebootstrapper
 
