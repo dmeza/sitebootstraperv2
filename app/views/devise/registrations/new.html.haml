@@ -21,5 +21,8 @@
     = f.label :password_confirmation
     %br/
     = f.password_field :password_confirmation
-  %p= f.submit "Sign up"
+  %p
+    %button.btn.btn-primary{:type => 'submit'}
+      %i.icon-circle-arrow-right
+      Sign up
 = render :partial => "devise/shared/links"

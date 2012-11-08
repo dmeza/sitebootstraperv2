@@ -33,13 +33,14 @@ ActiveRecord::Schema.define(:version => 20111123200225) do
     t.integer  "photo_file_size"
     t.boolean  "is_admin",                              :default => false
     t.string   "email",                                 :default => "",    :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "",    :null => false
+    t.string   "encrypted_password",                    :default => "",    :null => false
     t.string   "password_salt"
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string   "confirmation_token"
-    t.datetime "confirmed_at"
+    t.string   "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.string   "unconfirmed_email"
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",                         :default => 0
     t.datetime "current_sign_in_at"

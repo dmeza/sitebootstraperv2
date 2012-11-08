@@ -2,7 +2,12 @@ class HomeController < ApplicationController
    before_filter :authenticate_user!, :except => [:index]
 
   def index
+    render :home if current_user
+  end
 
+  def fb_channel
+    response.headers["Expires"] = CGI.rfc1123_date(Time.now + 365.days)
+    render :text => '<script src="//connect.facebook.net/en_US/all.js"></script>'
   end
 
   def return_to_admin

@@ -1,0 +1,7 @@
+%h2 Home
+%p
+  User: #{current_user.full_name} logged in!
+- if defined? FB_APP_ID
+  %p
+    %a{:class => "FB_share", :type => "icon_link", :href => '#', :onclick => "publishToFeed('#{request.url}','#{request.base_url}#{path_to_image('default_user.png')}','Sitebootstrapper!','It is very simple. To post to FB.');"}
+      Post to FB
