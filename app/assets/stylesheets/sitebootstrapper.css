@@ -29,5 +29,6 @@
 #error_explanation, .errors { background-color:red; border: 1px solid black; color:white; padding: 10px; }
 /*#admin_menu { list-style-type: none; overflow: auto; margin: 0 0 20px; }
 #admin_menu li { float: left; display: inline; padding: 5px; }*/
+#social_buttons span { padding: 5px; }
 .cl { clear: both; }
 .center { text-align: center; }
