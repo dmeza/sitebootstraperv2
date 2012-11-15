@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
 
   has_many :authentications, :dependent => :destroy
 
+  before_create :set_first_admin
+
   has_attached_file :photo, {
       :url => "/system/:class/:attachment/:id/:style_:basename.:extension",
       :path => ":rails_root/public/system/:class/:attachment/:id/:style_:basename.:extension",
@@ -73,4 +75,11 @@ class User < ActiveRecord::Base
       end
     end
   end
+
+  private
+
+  def set_first_admin
+    self.is_admin = true if User.where(:is_admin => true).count == 0
+  end
+
 end

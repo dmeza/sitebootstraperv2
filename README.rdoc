@@ -10,7 +10,7 @@
 6. Add a default host to you application.rb
      config.action_mailer.default_url_options = {:host => "localhost:3000"}
 7. Remove public/index.html (If is a new app)
-8. Run rails s  and enjoy!!!
+8. Run rails s and enjoy!!! The first user to register will become admin of the app.
 9. This engine uses a layout called "sitebootstrapper" just to show some funcionality out of box. If you want to use this layout just change it in Application_Controller.
      class ApplicationController < ActionController::Base
        layout "sitebootstrapper"
