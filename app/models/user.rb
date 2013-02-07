@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   end
 
   def apply_omniauth(omniauth)
-    self.email = omniauth['info']['email'] if email.blank?
+    self.email = omniauth['info']['email'] if email.blank? && !omniauth['info']['email'].blank?
     if (!omniauth['info']['first_name'].blank? && !omniauth['info']['last_name'].blank?)
       self.first_name ||= omniauth['info']['first_name']
       self.last_name ||= omniauth['info']['last_name']

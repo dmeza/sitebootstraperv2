@@ -14,7 +14,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       else
         user = omniauth['info']['email'].blank? ? User.new : User.find_or_initialize_by_email(omniauth['info']['email'])
         user.apply_omniauth(omniauth)
-        user.confirm! if !user.email.blank?
+        user.confirm!
         if (user.save)
           flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => omniauth['provider']
           sign_in_and_redirect(:user, user)
